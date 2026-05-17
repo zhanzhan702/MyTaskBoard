@@ -36,7 +36,7 @@ public class TaskController {
     }
 
     //删除任务
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public Map<String,String> deleteTask(@PathVariable String id) {
         taskService.deleteTask(id);
         Map<String,String> result = new HashMap<>();
@@ -45,6 +45,7 @@ public class TaskController {
     }
 
     //获取统计数据
+    @GetMapping("/stats")
     public Map<String, Object> stats(){
         return taskService.getStats();
     }
