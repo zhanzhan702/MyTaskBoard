@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Mapper
 public interface TaskMapper extends BaseMapper<Task> {
@@ -15,5 +14,5 @@ public interface TaskMapper extends BaseMapper<Task> {
 
     //自定义查询：按日期统计每日新增任务数量
     @Select("SELECT create_time AS date,COUNT(*) AS count FROM task GROUP BY create_time ORDER BY create_time")
-    List<Map<String, Objects>> countByDate();
+    List<Map<String, Object>> countByDate();
 }
