@@ -27,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
     public Task createTask(Task task) {
         task.setId(UUID.randomUUID().toString());
         taskMapper.insert(task);
-        return null;
+        return task;
     }
 
     @Override
