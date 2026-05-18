@@ -117,14 +117,14 @@ function drawDailyChart(app, dailyData) {
             fill: '#409EFF'
         }))
         // 日期标签（取后5位，如 05-17）
-        const dateShort = item.date ? item.date.substring(5) : ''
+        const dateShort = item.date ? item.date.substring(5, 10) : ''
         app.add(new Text({
             text: dateShort,
             x,
             y: baseY + 5,
             fontSize: 10,
             fill: '#666',
-            rotation: -30 // 倾斜显示，避免重叠
+            //rotation: -10 // 倾斜显示，避免重叠
         }))
     })
 }
