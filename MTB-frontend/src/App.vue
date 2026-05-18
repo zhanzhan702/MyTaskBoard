@@ -1,5 +1,4 @@
 <script setup>
-import TaskList from './view/TaskList.vue';
 
 </script>
 
