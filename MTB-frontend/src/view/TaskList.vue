@@ -23,6 +23,7 @@
                     <el-tag :type="row.completed ? 'success' : 'info'">
                         {{ row.completed ? '已完成' : '未完成' }}
                     </el-tag>
+                    <div v-if="row.completed">{{ row.finishedTime }}</div>
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建日期" width="120" />

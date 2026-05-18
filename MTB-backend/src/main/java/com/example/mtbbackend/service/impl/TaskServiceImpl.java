@@ -32,6 +32,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Task task) {
+        if(task.getCompleted()){
+            task.setFinishedTime();
+        }
         taskMapper.updateById(task);
         return taskMapper.selectById(task.getId());
     }
