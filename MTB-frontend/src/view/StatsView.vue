@@ -16,10 +16,38 @@ import { Leafer, Rect, Text } from 'leafer-ui'
 
 // 容器元素的引用
 const canvasContainer = ref(null)
+let app = null
+let stats = null
+
+// 封装图表绘制（便于初次绘制 + resize 重绘）
+function drawCharts() {
+    if (!app || !stats) return
+    app.clear()
+
+    app = new Leafer({
+        view: canvasContainer.value, // 挂载到DOM
+        width: canvasContainer.value.clientWidth,
+        height: canvasContainer.value.clientHeight,
+        fill: '#f0f2f5' // 背景色
+    })
+
+
+    drawCompletionChart(app, stats.completed, stats.uncompleted)
+    drawDailyChart(app, stats.daily)
+}
+
+// 窗口大小变化时的处理
+function handleResize() {
+    if (!canvasContainer.value) return
+    const width = canvasContainer.value.clientWidth
+    const height = canvasContainer.value.clientHeight
+    app.resize(width, height)
+    drawCharts() // 用之前的数据重绘
+}
 
 onMounted(async () => {
     // 1. 先获取统计数据
-    let stats
+    stats
     try {
         const response = await taskApi.getStats()
         stats = response.data
@@ -29,18 +57,18 @@ onMounted(async () => {
     }
 
     // 2. 初始化 Leafer 应用
-    const app = new Leafer({
+    app = new Leafer({
         view: canvasContainer.value, // 挂载到DOM
-        width: 800,
-        height: 500,
+        width: canvasContainer.value.clientWidth,
+        height: canvasContainer.value.clientHeight,
         fill: '#f0f2f5' // 背景色
     })
 
-    // 3. 绘制“已完成 vs 未完成”的简单柱状图
-    drawCompletionChart(app, stats.completed, stats.uncompleted)
+    // 3. 首次绘制
+    drawCharts(stats)
 
-    // 4. 绘制“每日新增任务”折线图（用Rect模拟）
-    drawDailyChart(app, stats.daily)
+    // 4. 监听窗口缩放
+    window.addEventListener('resize', handleResize)
 })
 
 // 绘制完成情况柱状图
@@ -48,13 +76,13 @@ function drawCompletionChart(app, completed, uncompleted) {
     // 标题
     app.add(new Text({
         text: '任务完成情况',
-        x: 300, y: 20,
+        x: app.width * 0.4, y: app.height * 0.05,
         fontSize: 18,
         fill: '#333'
     }))
 
-    const startX = 150, barWidth = 60, gap = 100
-    const baseY = 300 // 柱子底部Y坐标
+    const startX = app.width * 0.3, barWidth = 60, gap = 150
+    const baseY = app.height * 0.4 // 柱子底部Y坐标
 
     // 已完成柱子
     app.add(new Rect({
@@ -87,8 +115,8 @@ function drawCompletionChart(app, completed, uncompleted) {
 function drawDailyChart(app, dailyData) {
     if (!dailyData || dailyData.length === 0) return
 
-    const startX = 150, barWidth = 30, gap = 40
-    const baseY = 480 // 坐标轴底部
+    const startX = app.width * 0.2, barWidth = 30, gap = 40
+    const baseY = app.height * 0.9 // 坐标轴底部
     // 找到最大count，用于缩放高度
     const maxCount = Math.max(...dailyData.map(d => d.count))
     const scale = 100 / maxCount // 高度缩放因子
@@ -132,14 +160,14 @@ function drawDailyChart(app, dailyData) {
 
 <style scoped>
 .stats-container {
-    padding: 20px;
-    max-width: 900px;
+    padding: 3vh 5vw;
+    height: 90vh;
     margin: 0 auto;
 }
 
 .canvas-box {
-    width: 800px;
-    height: 500px;
+    width: 100%;
+    height: 70%;
     margin-top: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
