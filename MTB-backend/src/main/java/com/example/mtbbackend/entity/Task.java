@@ -15,7 +15,7 @@ public class Task {//数据库表task以及相应字段
     private String description;//任务介绍
     private Boolean completed;//完成情况
     private LocalDateTime createTime;//创建时间
-    private LocalDateTime finishTime;//完成时间
+    private LocalDateTime finishedTime;//完成时间
 
     public Task(){
     }
@@ -65,11 +65,11 @@ public class Task {//数据库表task以及相应字段
         this.createTime = createTime;
     }
 
-    public LocalDateTime getFinishTime() {
-        return finishTime;
+    public LocalDateTime getFinishedTime() {
+        return finishedTime;
     }
 
-    public void setFinishTime(LocalDateTime finishTime) {
-        this.finishTime = finishTime;
+    public void setFinishedTime(LocalDateTime finishedTime) {
+        this.finishedTime = finishedTime;
     }
 }
