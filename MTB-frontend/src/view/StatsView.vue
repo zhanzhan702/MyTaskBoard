@@ -116,8 +116,8 @@ function drawDailyChart(app, dailyData) {
             fontSize: 12,
             fill: '#409EFF'
         }))
-        // 日期标签（取后5位，如 05-17）
-        const dateShort = item.date ? item.date.substring(5, 10) : ''
+        // 日期标签（取后5位，原日期格式为'yyyy-mm-dd'）
+        const dateShort = item.date ? item.date.substring(5) : ''
         app.add(new Text({
             text: dateShort,
             x,
